@@ -10,7 +10,7 @@
 
 LevelMaker = Class{}
 
-function LevelMaker.generate(width, height)
+function LevelMaker.generate(width, height, safe)
     local tiles = {}
     local entities = {}
     local objects = {}
@@ -37,8 +37,8 @@ function LevelMaker.generate(width, height)
                 Tile(x, y, tileID, nil, tileset, topperset))
         end
 
-        -- chance to just be emptiness
-        if math.random(7) == 1 then
+        -- chance to just be emptiness if generation is unsafe and we aren't building the player spawn column
+        if not (safe and x == 1) and math.random(7) == 1 then
             for y = 7, height do
                 table.insert(tiles[y],
                     Tile(x, y, tileID, nil, tileset, topperset))
