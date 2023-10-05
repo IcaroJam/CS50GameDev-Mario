@@ -163,10 +163,10 @@ function LevelMaker.generate(width, height, safe)
 
     local lockFlag = true
     local keyFlag = true
-    -- iterate over the objects and turn a jump-block into a lock
-    while lockFlag do
+    -- iterate over the objects and turn a jump-block into a lock and a bush into a key
+    while lockFlag and keyFlag do
         for i, object in ipairs(objects) do
-            if object.texture == "jump-blocks" and math.random(6) == 1 then
+            if lockFlag and object.texture == "jump-blocks" and math.random(6) == 1 then
                 lockFlag = false
                 objects[i] = GameObject {
                     texture = 'keylocks',
@@ -181,8 +181,21 @@ function LevelMaker.generate(width, height, safe)
                     hit = false,
                     solid = true,
                 }
-                print("Lock spawned", objects[i].x, objects[i].y)
-                break
+            elseif keyFlag and object.texture == "bushes" and math.random(6) == 1 then
+                keyFlag = false
+                objects[i] = GameObject {
+                    texture = 'keylocks',
+                    x = object.x,
+                    y = object.y,
+                    width = 16,
+                    height = 16,
+
+                    -- make it a random variant
+                    frame = math.random(#LOCKKEYS),
+                    collidable = true,
+                    hit = false,
+                    solid = true,
+                }
             end
         end
     end
