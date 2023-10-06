@@ -35,6 +35,21 @@ function GenerateQuads(atlas, tilewidth, tileheight)
 end
 
 --[[
+    Generate the flag quads.
+]]
+function GenerateFlagQuads(atlas)
+    local flagsheet = {}
+
+    for y = 0, 3 do
+        for x = 0, 2 do
+            table.insert(flagsheet, love.graphics.newQuad(96 + x * 16, y * 16, 16, 16, atlas:getDimensions()))
+        end
+    end
+
+    return flagsheet
+end
+
+--[[
     Divides quads we've generated via slicing our tile sheet into separate tile sets.
 ]]
 function GenerateTileSets(quads, setsX, setsY, sizeX, sizeY)
