@@ -164,7 +164,7 @@ function LevelMaker.generate(width, height, safe)
     local lockFlag = true
     local keyFlag = true
     -- iterate over the objects and turn a jump-block into a lock and a bush into a key
-    while lockFlag and keyFlag do
+    while lockFlag or keyFlag do
         for i, object in ipairs(objects) do
             if lockFlag and object.texture == "jump-blocks" and math.random(6) == 1 then
                 lockFlag = false
@@ -180,6 +180,15 @@ function LevelMaker.generate(width, height, safe)
                     collidable = true,
                     hit = false,
                     solid = true,
+
+                    onCollide = function(obj, player)
+                        if player.hasKey then
+                            gSounds["powerup-reveal"]:play()
+                            obj.hit = true
+                        else
+                            gSounds["empty-block"]:play()
+                        end
+                    end
                 }
             elseif keyFlag and object.texture == "bushes" and math.random(6) == 1 then
                 keyFlag = false
@@ -193,8 +202,13 @@ function LevelMaker.generate(width, height, safe)
                     -- make it a random variant
                     frame = math.random(#LOCKKEYS),
                     collidable = true,
-                    hit = false,
-                    solid = true,
+                    consumable = true,
+                    solid = false,
+
+                    onConsume = function(player)
+                        gSounds["pickup"]:play()
+                        player.hasKey = true
+                    end
                 }
             end
         end
