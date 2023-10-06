@@ -89,7 +89,7 @@ function PlayState:updateCamera()
         self.player.x - (VIRTUAL_WIDTH / 2 - 8)))
 
     -- adjust background X to move a third the rate of the camera for parallax
-    self.backgroundX = (self.camX / 3) % 256
+    self.backgroundX = math.floor(self.camX / 3) % 256
 end
 
 --[[
