@@ -90,9 +90,24 @@ end
 
 function SpawnPoleFlag(lvl)
     -- Empty the last four columns of the level
-    
+    for x = lvl.tileMap.width - 3, lvl.tileMap.width do
+        for y = 1, lvl.tileMap.height do
+            lvl.tileMap.tiles[y][x] = nil
+        end
+    end
     -- Create a kind of ground stair to the pole
-    
+    local tileset = lvl.tileMap.tiles[1][1].tileset
+    local tileID
+    for x = lvl.tileMap.width - 3, lvl.tileMap.width do
+        for y = 1, lvl.tileMap.height do
+            if (y > -x + lvl.tileMap.width + 3) and y > 4 then
+                tileID = TILE_ID_GROUND
+            else
+                tileID = TILE_ID_EMPTY
+            end
+            lvl.tileMap.tiles[y][x] = Tile(x, y, tileID, nil, tileset, nil)
+        end
+    end
     -- add the pole object
     table.insert(lvl.objects, GameObject {
         texture = "polesNflags",
