@@ -63,6 +63,7 @@ function PlayerJumpState:update(dt)
                     object.onCollide(object, self.player)
                     if object.hit then
                         table.remove(self.player.level.objects, k)
+                        SpawnPoleFlag(self.player.level)
                     end
                 else
                     object.onCollide(object)
@@ -85,4 +86,47 @@ function PlayerJumpState:update(dt)
             gStateMachine:change('start')
         end
     end
+end
+
+function SpawnPoleFlag(lvl)
+    -- Empty the last four columns of the level
+    
+    -- Create a kind of ground stair to the pole
+    
+    -- add the pole object
+    table.insert(lvl.objects, GameObject {
+        texture = "polesNflags",
+        quad = "poles",
+        x = (lvl.tileMap.width - 1.5) * TILE_SIZE,
+        y = 2 * TILE_SIZE,
+        width = 16,
+        height = 48,
+
+        -- make it a random variant
+        frame = 3, --math.random(#POLES),
+        collidable = true,
+        consumable = false,
+        solid = false,
+
+        onCollide = function()
+        end
+    })
+    -- add the flag object
+    table.insert(lvl.objects, GameObject {
+        texture = "polesNflags",
+        quad = "flags",
+        x = (lvl.tileMap.width - 1.5) * TILE_SIZE,
+        y = 2 * TILE_SIZE,
+        width = 16,
+        height = 16,
+
+        -- make it a random variant
+        frame = 1,--math.random(#POLES),
+        collidable = true,
+        consumable = false,
+        solid = false,
+
+        onCollide = function()
+        end
+    })
 end
