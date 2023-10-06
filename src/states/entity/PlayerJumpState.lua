@@ -97,6 +97,7 @@ function SpawnPoleFlag(lvl)
     end
     -- Create a kind of ground stair to the pole
     local tileset = lvl.tileMap.tiles[1][1].tileset
+    local topperset = lvl.tileMap.tiles[1][1].topperset
     local tileID
     for x = lvl.tileMap.width - 3, lvl.tileMap.width do
         for y = 1, lvl.tileMap.height do
@@ -105,7 +106,7 @@ function SpawnPoleFlag(lvl)
             else
                 tileID = TILE_ID_EMPTY
             end
-            lvl.tileMap.tiles[y][x] = Tile(x, y, tileID, nil, tileset, nil)
+            lvl.tileMap.tiles[y][x] = Tile(x, y, tileID, (y > 1 and tileID == TILE_ID_GROUND and lvl.tileMap.tiles[y - 1][x].id == TILE_ID_EMPTY) and topperset or nil, tileset, topperset)
         end
     end
     -- add the pole object
