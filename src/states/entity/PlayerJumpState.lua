@@ -98,7 +98,7 @@ function SpawnPoleFlag(lvl)
         texture = "polesNflags",
         quad = "poles",
         x = (lvl.tileMap.width - 1.5) * TILE_SIZE,
-        y = 2 * TILE_SIZE,
+        y = 1 * TILE_SIZE,
         width = 16,
         height = 48,
 
@@ -115,8 +115,8 @@ function SpawnPoleFlag(lvl)
     table.insert(lvl.objects, GameObject {
         texture = "polesNflags",
         quad = "flags",
-        x = (lvl.tileMap.width - 1.5) * TILE_SIZE,
-        y = 2 * TILE_SIZE,
+        x = (lvl.tileMap.width - 1) * TILE_SIZE,
+        y = 1 * TILE_SIZE,
         width = 16,
         height = 16,
 
