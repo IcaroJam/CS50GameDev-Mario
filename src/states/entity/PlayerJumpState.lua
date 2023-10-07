@@ -148,6 +148,11 @@ function SpawnPoleFlag(lvl)
         consumable = false,
         solid = false,
 
+		animation = Animation {
+			frames = {1, 2},
+			interval = 0.2
+		},
+
         onCollide = function()
         end
     })

@@ -16,6 +16,7 @@ function GameObject:init(def)
     self.width = def.width
     self.height = def.height
     self.frame = def.frame
+	self.animation = def.animation
     self.solid = def.solid
     self.collidable = def.collidable
     self.consumable = def.consumable
@@ -30,7 +31,10 @@ function GameObject:collides(target)
 end
 
 function GameObject:update(dt)
-
+	if self.animation then
+		self.animation:update(dt)
+		self.frame = self.animation:getCurrentFrame()
+	end
 end
 
 function GameObject:render()
