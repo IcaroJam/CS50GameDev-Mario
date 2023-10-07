@@ -89,6 +89,12 @@ function PlayerJumpState:update(dt)
 end
 
 function SpawnPoleFlag(lvl)
+    -- Delete the game objects occupying the region reserved for the flag
+    local i = #lvl.objects
+    while lvl.objects[i].x > (lvl.tileMap.width - 5) * TILE_SIZE do
+        table.remove(lvl.objects, i)
+        i = i - 1
+    end
     -- Empty the last four columns of the level
     for x = lvl.tileMap.width - 3, lvl.tileMap.width do
         for y = 1, lvl.tileMap.height do
