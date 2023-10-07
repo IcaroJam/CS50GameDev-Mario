@@ -63,7 +63,7 @@ function PlayerJumpState:update(dt)
                     object.onCollide(object, self.player)
                     if object.hit then
                         table.remove(self.player.level.objects, k)
-                        SpawnPoleFlag(self.player.level)
+                        SpawnPoleFlag(self.player)
                     end
                 else
                     object.onCollide(object)
@@ -88,38 +88,38 @@ function PlayerJumpState:update(dt)
     end
 end
 
-function SpawnPoleFlag(lvl)
+function SpawnPoleFlag(player)
     -- Delete the game objects occupying the region reserved for the flag
-    local i = #lvl.objects
-    while lvl.objects[i].x > (lvl.tileMap.width - 5) * TILE_SIZE do
-        table.remove(lvl.objects, i)
+    local i = #player.level.objects
+    while player.level.objects[i].x > (player.level.tileMap.width - 5) * TILE_SIZE do
+        table.remove(player.level.objects, i)
         i = i - 1
     end
     -- Empty the last four columns of the level
-    for x = lvl.tileMap.width - 3, lvl.tileMap.width do
-        for y = 1, lvl.tileMap.height do
-            lvl.tileMap.tiles[y][x] = nil
+    for x = player.level.tileMap.width - 3, player.level.tileMap.width do
+        for y = 1, player.level.tileMap.height do
+            player.level.tileMap.tiles[y][x] = nil
         end
     end
     -- Create a kind of ground stair to the pole
-    local tileset = lvl.tileMap.tiles[1][1].tileset
-    local topperset = lvl.tileMap.tiles[1][1].topperset
+    local tileset = player.level.tileMap.tiles[1][1].tileset
+    local topperset = player.level.tileMap.tiles[1][1].topperset
     local tileID
-    for x = lvl.tileMap.width - 3, lvl.tileMap.width do
-        for y = 1, lvl.tileMap.height do
-            if (y > -x + lvl.tileMap.width + 3) and y > 4 then
+    for x = player.level.tileMap.width - 3, player.level.tileMap.width do
+        for y = 1, player.level.tileMap.height do
+            if (y > -x + player.level.tileMap.width + 3) and y > 4 then
                 tileID = TILE_ID_GROUND
             else
                 tileID = TILE_ID_EMPTY
             end
-            lvl.tileMap.tiles[y][x] = Tile(x, y, tileID, (y > 1 and tileID == TILE_ID_GROUND and lvl.tileMap.tiles[y - 1][x].id == TILE_ID_EMPTY) and topperset or nil, tileset, topperset)
+            player.level.tileMap.tiles[y][x] = Tile(x, y, tileID, (y > 1 and tileID == TILE_ID_GROUND and player.level.tileMap.tiles[y - 1][x].id == TILE_ID_EMPTY) and topperset or nil, tileset, topperset)
         end
     end
     -- add the pole object
-    table.insert(lvl.objects, GameObject {
+    table.insert(player.level.objects, GameObject {
         texture = "polesNflags",
         quad = "poles",
-        x = (lvl.tileMap.width - 1.5) * TILE_SIZE,
+        x = (player.level.tileMap.width - 1.5) * TILE_SIZE,
         y = 1 * TILE_SIZE,
         width = 16,
         height = 48,
@@ -127,17 +127,21 @@ function SpawnPoleFlag(lvl)
         -- make it a random variant
         frame = 3, --math.random(#POLES),
         collidable = true,
-        consumable = false,
+        consumable = true,
         solid = false,
 
-        onCollide = function()
+        onConsume = function(plyr)
+			gStateMachine:change("play", {
+				levelWidth = plyr.level.tileMap.width + 20,
+				score = plyr.score
+			})
         end
     })
     -- add the flag object
-    table.insert(lvl.objects, GameObject {
+    table.insert(player.level.objects, GameObject {
         texture = "polesNflags",
         quad = "flags",
-        x = (lvl.tileMap.width - 1) * TILE_SIZE,
+        x = (player.level.tileMap.width - 1) * TILE_SIZE,
         y = 1 * TILE_SIZE,
         width = 16,
         height = 16,

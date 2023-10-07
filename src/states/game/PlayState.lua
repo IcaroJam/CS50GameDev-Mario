@@ -37,6 +37,28 @@ function PlayState:init()
     self.player:changeState('falling')
 end
 
+function PlayState:enter(params)
+	if params then
+		self.camX = 0
+		self.camY = 0
+		self.level = LevelMaker.generate(params.levelWidth, 10, true)
+		self.tileMap = self.level.tileMap
+		self.background = math.random(3)
+		self.backgroundX = 0
+
+		self.gravityOn = true
+		self.gravityAmount = 6
+
+		self:spawnEnemies()
+
+		self.player.x, self.player.y = 0, 0
+		self.player.level = self.level
+		self.player.map = self.tileMap
+		self.player.score = params.score
+		self.player:changeState('falling')
+	end
+end
+
 function PlayState:update(dt)
     Timer.update(dt)
 
